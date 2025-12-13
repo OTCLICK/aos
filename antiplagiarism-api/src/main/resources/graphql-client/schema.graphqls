@@ -1,0 +1,35 @@
+type WorkSubmission {
+    workId: ID!
+    title: String!
+    studentId: String!
+    workedAt: String!
+}
+
+type Grade {
+    workId: ID!
+    grade: Int!
+    gradedAt: String!
+}
+
+type Query {
+    workById(workId: ID!): WorkSubmission
+    gradeByWorkId(workId: ID!): Grade
+    allWorks: [WorkSubmission]
+    allGrades: [Grade]
+}
+
+input WorkSubmissionInput {
+    title: String!
+    studentId: String!
+    fileContent: String!
+}
+
+input GradeInput {
+    grade: Int!
+    reviewerId: String!
+}
+
+type Mutation {
+    submitWork(input: WorkSubmissionInput!): WorkSubmission
+    gradeWork(workId: ID!, input: GradeInput!): Grade
+}

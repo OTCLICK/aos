@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="antiplagiarism-events-contract:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/antiplagiarism_events_contract_jar</output-path>
+    <root id="archive" name="antiplagiarism-events-contract.jar">
+      <element id="module-output" name="antiplagiarism-events-contract" />
+    </root>
+  </artifact>
+</component>
