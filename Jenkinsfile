@@ -28,7 +28,6 @@ pipeline {
                 sh 'cd notification-service && mvn clean package -DskipTests'
                 sh 'cd statistics-service && mvn clean package -DskipTests'
                 sh 'cd plagiarism-analysis-service && mvn clean package -DskipTests'
-                sh 'cd work-grpc-server && mvn clean package -DskipTests'
             }
         }
 
