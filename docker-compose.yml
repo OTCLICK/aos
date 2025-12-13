@@ -54,6 +54,13 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - microservices-net
+    command: |
+      bash -c "
+        apt-get update && 
+        apt-get install -y docker.io &&
+        rm -rf /var/lib/apt/lists/* &&
+        /usr/local/bin/jenkins.sh
+      "
 
   # Микросервисы
   antiplagiarism:
