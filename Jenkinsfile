@@ -16,9 +16,8 @@ pipeline {
 
         stage('Build Contracts') {
             steps {
-                // Сначала собираем контракты — они нужны всем сервисам
                 sh 'cd antiplagiarism-api && mvn clean install -DskipTests'
-                sh 'cd antiplagiarism-events-contract && mvn clean install -DskipTests'
+                sh 'cd events-contract && mvn clean install -DskipTests'
             }
         }
 
