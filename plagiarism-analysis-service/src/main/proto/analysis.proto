@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "org.example.analysisservice";
+option java_outer_classname = "AnalysisServiceProto";
+
+service AnalysisService {
+  rpc CheckPlagiarism(CheckPlagiarismRequest) returns (CheckPlagiarismResponse) {}
+}
+
+message CheckPlagiarismRequest {
+  string work_id = 1;
+  string file_content = 2;
+}
+
+message CheckPlagiarismResponse {
+  string work_id = 1;
+  int32 similarity_score = 2;
+  bool is_flagged = 3;
+  string checked_at = 4;
+}
