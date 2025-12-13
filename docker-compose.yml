@@ -59,18 +59,13 @@ services:
         apt-get update && 
         apt-get install -y curl unzip docker.io &&
       
-        # Определяем архитектуру
-        ARCH=$(uname -m)
-        if [ \"$${ARCH}\" = \"aarch64\" ]; then
-          PROTOC_ARCH=linux-aarch_64
-        else
-          PROTOC_ARCH=linux-x86_64
-        fi
+        DOCKER_COMPOSE_VERSION=v2.31.0
+        curl -L \"https://github.com/docker/compose/releases/download/$${DOCKER_COMPOSE_VERSION}/docker-compose-linux-aarch64\" -o /usr/local/bin/docker-compose &&
+        chmod +x /usr/local/bin/docker-compose &&
       
         PROTOC_VERSION=25.2
-        echo \"Detected architecture: $${ARCH}, using protoc for $${PROTOC_ARCH}\"
-        curl -LO https://github.com/protocolbuffers/protobuf/releases/download/v$${PROTOC_VERSION}/protoc-$${PROTOC_VERSION}-$${PROTOC_ARCH}.zip &&
-        unzip protoc-$${PROTOC_VERSION}-$${PROTOC_ARCH}.zip -d /usr/local &&
+        curl -LO https://github.com/protocolbuffers/protobuf/releases/download/v$${PROTOC_VERSION}/protoc-$${PROTOC_VERSION}-linux-aarch_64.zip &&
+        unzip protoc-$${PROTOC_VERSION}-linux-aarch_64.zip -d /usr/local &&
       
         /usr/local/bin/jenkins.sh
       "
