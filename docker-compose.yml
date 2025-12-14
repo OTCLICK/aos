@@ -65,7 +65,7 @@ services:
       
         PROTOC_VERSION=25.2
         curl -LO https://github.com/protocolbuffers/protobuf/releases/download/v$${PROTOC_VERSION}/protoc-$${PROTOC_VERSION}-linux-aarch_64.zip &&
-        unzip protoc-$${PROTOC_VERSION}-linux-aarch_64.zip -d /usr/local &&
+        unzip -o protoc-$${PROTOC_VERSION}-linux-aarch_64.zip -d /usr/local &&
       
         /usr/local/bin/jenkins.sh
       "
