@@ -24,9 +24,7 @@ services:
   prometheus:
     image: prom/prometheus
     volumes:
-      - ./prometheus:/etc/prometheus
-    command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
+      - ./prometheus.yml:/etc/prometheus.yml:ro
     ports:
       - "9090:9090"
     networks:
