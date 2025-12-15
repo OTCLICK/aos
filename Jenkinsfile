@@ -31,6 +31,25 @@ pipeline {
             }
         }
 
+        stage('Docker Compose Build') {
+            steps {
+                script {
+                            // Убедитесь, что Docker и docker-compose доступны
+                    sh 'docker --version'
+                    sh 'docker-compose --version || docker compose version'
+
+                            // Удалить старые контейнеры и образы (опционально)
+                    sh 'docker-compose down --remove-orphans || true'
+
+                            // Пересобрать образы
+                    sh 'docker-compose build --no-cache'
+
+                            // Запустить контейнеры (если нужно)
+                    sh 'docker-compose up -d'
+                }
+            }
+        }
+
 //         stage('Deploy') {
 //             steps {
 //                 sh 'pwd'
