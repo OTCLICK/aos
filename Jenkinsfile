@@ -31,16 +31,16 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            steps {
-                sh 'pwd'
-                sh 'ls -la'
-                sh 'ls -la prometheus/'
-
-                sh 'test -f prometheus/prometheus.yml && echo "✅ prometheus.yml FOUND" || echo "❌ prometheus.yml MISSING"'
-                sh 'docker-compose down'
-                sh 'docker-compose up --build -d'
-            }
-        }
+//         stage('Deploy') {
+//             steps {
+//                 sh 'pwd'
+//                 sh 'ls -la'
+//                 sh 'ls -la prometheus/'
+//
+//                 sh 'test -f prometheus/prometheus.yml && echo "✅ prometheus.yml FOUND" || echo "❌ prometheus.yml MISSING"'
+//                 sh 'docker-compose down'
+//                 sh 'docker-compose up --build -d'
+//             }
+//         }
     }
 }
