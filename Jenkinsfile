@@ -31,24 +31,49 @@ pipeline {
             }
         }
 
-        stage('Docker Compose Build') {
-            steps {
-                script {
-                            // Убедитесь, что Docker и docker-compose доступны
-                    sh 'docker --version'
-                    sh 'docker-compose --version || docker compose version'
-
-                            // Удалить старые контейнеры и образы (опционально)
-                    sh 'docker-compose down --remove-orphans || true'
-
-                            // Пересобрать образы
-                    sh 'docker-compose build --no-cache'
-
-                            // Запустить контейнеры (если нужно)
-                    sh 'docker-compose up -d'
+                stage('Build Docker Images') {
+                    steps {
+                        echo 'Сборка Docker образов...'
+                        sh 'docker compose build'
+                    }
                 }
-            }
-        }
+
+                stage('Deploy to Docker') {
+                    steps {
+                        echo 'Развертывание в Docker...'
+                        sh 'docker compose down --remove-orphans || true'
+                        sh 'docker compose up -d'
+                    }
+                }
+
+                stage('Health Check') {
+                    steps {
+                        echo 'Проверка состояния сервисов...'
+                        sleep(time: 30, unit: 'SECONDS')
+                        sh 'curl -f http://localhost:8080/actuator/health || exit 1'
+                    }
+                }
+
+//         stage('Docker Compose Build') {
+//             steps {
+//                 script {
+//                             // Убедитесь, что Docker и docker-compose доступны
+//                     sh 'docker --version'
+//                     sh 'docker-compose --version || docker compose version'
+//
+//                             // Удалить старые контейнеры и образы (опционально)
+//                     sh 'docker-compose down --remove-orphans || true'
+//
+//                             // Пересобрать образы
+//                     sh 'docker-compose build --no-cache'
+//
+//                             // Запустить контейнеры (если нужно)
+//                     sh 'docker-compose up -d'
+//                 }
+//             }
+//         }
+
+
 
 //         stage('Deploy') {
 //             steps {
