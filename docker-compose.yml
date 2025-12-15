@@ -24,11 +24,14 @@ services:
   prometheus:
     image: prom/prometheus
     volumes:
-      - ./prometheus:/etc/prometheus/
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
     ports:
       - "9090:9090"
     networks:
       - microservices-net
+
 
   grafana:
     image: grafana/grafana:latest
