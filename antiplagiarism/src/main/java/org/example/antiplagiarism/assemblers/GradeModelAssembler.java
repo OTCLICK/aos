@@ -13,6 +13,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Component
 public class GradeModelAssembler implements RepresentationModelAssembler<GradeResponse, EntityModel<GradeResponse>> {
 
+    //привет
     @Override
     public EntityModel<GradeResponse> toModel(GradeResponse grade) {
         return EntityModel.of(grade,
