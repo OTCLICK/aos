@@ -23,10 +23,12 @@ services:
 
   prometheus:
     image: prom/prometheus
-    volumes:
-      - ./prometheus.yml:/etc/prometheus.yml:ro
+#    volumes:
+#      - ./prometheus.yml:/etc/prometheus.yml:ro
 #    volumes:
 #      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     ports:
       - "9090:9090"
     networks:
