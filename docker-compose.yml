@@ -62,10 +62,6 @@ services:
 #      - microservices-net
 #    command: |
 #      bash -c "
-#        echo '' > /var/jenkins_home/config.xml &&
-#        echo '<?xml version=\"1.0\" encoding=\"UTF-8\"?>' > /var/jenkins_home/config.xml &&
-#        echo '<hudson><useSecurity>false</useSecurity><authorizationStrategy class=\"hudson.security.AuthorizationStrategy\$Unsecured\"/></hudson>' >> /var/jenkins_home/config.xml &&
-#        /usr/local/bin/jenkins.sh
 #
 #        apt-get update &&
 #        apt-get install -y curl unzip docker.io &&
@@ -80,6 +76,23 @@ services:
 #
 #        /usr/local/bin/jenkins.sh
 #      "
+#
+#          jenkins:
+#      build:
+#        context: .
+#        dockerfile: Dockerfile.jenkins
+#      image: sop-jenkins:latest
+#      container_name: hosting-jenkins
+#      restart: always
+#      ports:
+#        - "8081:8080"
+#        - "50000:50000"
+#      volumes:
+#              - jenkins-data:/var/jenkins_home
+#      - /var/run/docker.sock:/var/run/docker.sock
+#      networks:
+#        - microservices-net
+
 
   antiplagiarism:
     build: ./antiplagiarism
