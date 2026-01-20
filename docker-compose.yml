@@ -23,8 +23,8 @@ services:
 
   prometheus:
     image: prom/prometheus
-    build: ./prometheus
-    #    volumes:
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro     #    volumes:
 #      - ./prometheus.yml:/etc/prometheus.yml:ro
 #    volumes:
 #      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro

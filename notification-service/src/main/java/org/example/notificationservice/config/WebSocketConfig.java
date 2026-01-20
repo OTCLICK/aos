@@ -19,10 +19,8 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(notificationHandler, "/ws/notifications")
-                // ВНИМАНИЕ: "*" только для разработки!
-                // В продакшене: .setAllowedOrigins("https://yourdomain.com")
                 .setAllowedOrigins("*");
-
+//СМОТРИМ
         // .withSockJS();
     }
 }

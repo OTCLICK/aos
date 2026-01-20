@@ -9,6 +9,8 @@ import org.example.antiplagiarism.service.SubmissionService;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,6 +36,8 @@ public class SubmissionController implements SubmissionApi {
 
     @Override
     public ResponseEntity<EntityModel<WorkSubmissionResponse>> submitWork(@Valid WorkSubmissionRequest request) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("AAA" + auth);
         WorkSubmissionResponse response = submissionService.submitWork(request);
         EntityModel<WorkSubmissionResponse> model = workSubmissionModelAssembler.toModel(response);
         return ResponseEntity.created(linkTo(methodOn(SubmissionController.class).getWorkById(response.getWorkId())).toUri())

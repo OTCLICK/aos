@@ -44,7 +44,7 @@ public class AuditEventListener {
         }
         try {
             log.info("AUDIT: Received WorkSubmittedEvent: {}", event);
-            // if ("CRASH".equals(event.title())) throw new RuntimeException("Simulated crash");
+             if ("CRASH".equals(event.title())) throw new RuntimeException("Simulated crash");
             channel.basicAck(deliveryTag, false);
         } catch (Exception e) {
             log.error("Failed to process WorkSubmittedEvent: {}. Sending to DLQ", event, e);

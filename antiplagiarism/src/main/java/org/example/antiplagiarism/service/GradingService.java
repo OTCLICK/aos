@@ -3,6 +3,7 @@ package org.example.antiplagiarism.service;
 import org.example.antiplagiarism.config.RabbitMQConfig;
 import org.example.antiplagiarism.dto.GradeRequest;
 import org.example.antiplagiarism.dto.GradeResponse;
+import org.example.antiplagiarism.entity.Grade;
 import org.example.antiplagiarism.entity.User;
 import org.example.antiplagiarism.entity.enums.UserRole;
 import org.example.antiplagiarism.entity.Work;
@@ -42,7 +43,7 @@ public class GradingService {
         Work work = workRepository.findById(workId)
                 .orElseThrow(() -> new ResourceNotFoundException("Работа", workId));
 
-        User reviewer = userRepository.findByEmail(request.reviewerId())
+        User reviewer = userRepository.findById(request.reviewerId())
                 .orElseThrow(() -> new IllegalArgumentException("Проверяющий не найден: " + request.reviewerId()));
 
         if (reviewer.getRole() != UserRole.REVIEWER) {
@@ -53,12 +54,13 @@ public class GradingService {
             throw new IllegalStateException("Нельзя оценить работу в статусе: " + work.getStatus());
         }
 
-        org.example.antiplagiarism.entity.Grade grade = new org.example.antiplagiarism.entity.Grade(
+        Grade grade = new Grade(
                 work, reviewer, request.grade(), null
         );
-        org.example.antiplagiarism.entity.Grade savedGrade = gradeRepository.save(grade);
+        Grade savedGrade = gradeRepository.save(grade);
 
         work.setStatus(WorkStatus.GRADED);
+        work.setReviewer(reviewer);
         workRepository.save(work);
 
         sendGradeAssignedEvent(savedGrade, reviewer.getEmail());

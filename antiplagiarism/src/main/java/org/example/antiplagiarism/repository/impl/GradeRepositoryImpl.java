@@ -1,6 +1,7 @@
 package org.example.antiplagiarism.repository.impl;
 
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.example.antiplagiarism.entity.Grade;
 import org.example.antiplagiarism.repository.BaseRepository;
 import org.example.antiplagiarism.repository.GradeRepository;
@@ -38,5 +39,15 @@ public class GradeRepositoryImpl extends BaseRepository<Grade, String> implement
         return entityManager.createQuery(
                         "SELECT g FROM Grade g", Grade.class)
                 .getResultList();
+    }
+
+    @Override
+    @Transactional
+    public void deleteByWorkId(String workId) {
+        entityManager.createQuery(
+                        "DELETE FROM Grade g WHERE g.work.id = :workId"
+                )
+                .setParameter("workId", workId)
+                .executeUpdate();
     }
 }

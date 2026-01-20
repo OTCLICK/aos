@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket Demo</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        #messages { border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: scroll; background: #f9f9f9; }
+        .log { color: gray; font-size: 0.9em; }
+        .msg { color: blue; font-weight: bold; }
+    </style>
+</head>
+<body>
+<h2>Live Notifications (simple-notification-service)</h2>
+<div id="status">Status: Подключение...</div>
+<div id="messages"></div>
+
+<script>
+    const statusDiv = document.getElementById('status');
+    const messagesDiv = document.getElementById('messages');
+
+    const socket = new WebSocket('ws://localhost:8081/ws/notifications?userId=user2');
+
+    socket.onopen = () => {
+        statusDiv.innerHTML = '<span style="color:green">Подключено к уведомлениям о плагиате</span>';
+        log('Подключено. PING каждые 10 сек...');
+        setInterval(() => {
+            if (socket.readyState === WebSocket.OPEN) {
+                socket.send('PING');
+                log('→ PING отправлен');
+            }
+        }, 10000);
+    };
+
+    socket.onmessage = (event) => {
+        if (event.data === 'PONG') {
+            log('← PONG получен');
+            return;
+        }
+
+        try {
+            const data = JSON.parse(event.data);
+            if (data.type === 'PLAGIARISM_RESULT') {
+                const div = document.createElement('div');
+                div.style.padding = '15px';
+                div.style.margin = '10px 0';
+                div.style.borderRadius = '8px';
+                div.style.backgroundColor = data.flagged ? '#ffebee' : '#e8f5e8';
+                div.style.borderLeft = data.flagged ? '5px solid #e53935' : '5px solid #43a047';
+                div.innerHTML = `
+                    <strong>Работа: ${data.workId}</strong><br>
+                    Похожесть: <strong>${data.score}%</strong><br>
+                    Флаг плагиата: <strong>${data.flagged ? 'Да' : 'Нет'}</strong><br>
+                    <small>${data.checkedAt}</small>
+                `;
+                messagesDiv.prepend(div);
+            }
+        } catch (e) {
+            log('Сообщение: ' + event.data);
+        }
+    };
+
+    socket.onclose = () => statusDiv.innerHTML = '<span style="color:red">Отключено</span>';
+
+    function log(text) {
+        const div = document.createElement('div');
+        div.style.color = 'gray';
+        div.style.fontSize = '0.9em';
+        div.textContent = '[ ' + new Date().toLocaleTimeString() + ' ] ' + text;
+        messagesDiv.prepend(div);
+    }
+</script>
+</body>
+</html>

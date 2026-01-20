@@ -9,5 +9,7 @@ public interface GradeRepository {
     Grade save(Grade grade);
     Optional<Grade> findByWorkId(String workId);
     List<Grade> findAll();
+    void deleteByWorkId(String workId);
+
 
 }

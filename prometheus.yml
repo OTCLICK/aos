@@ -6,8 +6,8 @@ scrape_configs:
     metrics_path: "/actuator/prometheus"
     static_configs:
       - targets:
-          - "antiplagiarism:8080"
-          - "audit-service:8082"
-          - "notification-service:8081"
-          - "statistics-service:8084"
-          - "plagiarism-analysis-service:8085"
+            - "host.docker.internal:8080"   # antiplagiarism
+            - "host.docker.internal:8081"   # notification-service
+            - "host.docker.internal:8082"   # audit-service
+            - "host.docker.internal:8084"   # statistics-service
+            - "host.docker.internal:8085"   # plagiarism-analysis-service

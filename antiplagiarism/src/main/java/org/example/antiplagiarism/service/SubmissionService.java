@@ -10,6 +10,7 @@ import org.example.antiplagiarism.entity.Work;
 import org.example.antiplagiarism.events.WorkDeletedEvent;
 import org.example.antiplagiarism.events.WorkSubmittedEvent;
 import org.example.antiplagiarism.exception.ResourceNotFoundException;
+import org.example.antiplagiarism.repository.GradeRepository;
 import org.example.antiplagiarism.repository.UserRepository;
 import org.example.antiplagiarism.repository.WorkRepository;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -26,17 +27,19 @@ public class SubmissionService {
     private final WorkRepository workRepository;
     private final UserRepository userRepository;
     private final RabbitTemplate rabbitTemplate;
+    private final GradeRepository gradeRepository;
 
     public SubmissionService(WorkRepository workRepository,
                              UserRepository userRepository,
-                             RabbitTemplate rabbitTemplate) {
+                             RabbitTemplate rabbitTemplate, GradeRepository gradeRepository) {
         this.workRepository = workRepository;
         this.userRepository = userRepository;
         this.rabbitTemplate = rabbitTemplate;
+        this.gradeRepository = gradeRepository;
     }
 
     public WorkSubmissionResponse submitWork(WorkSubmissionRequest request) {
-        User student = userRepository.findByEmail(request.studentId())
+        User student = userRepository.findById(request.studentId())
                 .orElseThrow(() -> new ValidationException("Студент не найден: " + request.studentId()));
 
         if (student.getRole() != UserRole.STUDENT) {
@@ -68,8 +71,8 @@ public class SubmissionService {
                 .orElseThrow(() -> new ValidationException("Такой работы нет"));
 
         sendWorkDeletedEvent(work);
-        workRepository.deleteById(workId);
-    }
+        gradeRepository.deleteByWorkId(workId);
+        workRepository.deleteById(workId);    }
 
     public WorkSubmissionResponse getWorkById(String workId) {
         Work work = workRepository.findById(workId)
@@ -113,7 +116,7 @@ public class SubmissionService {
         WorkSubmittedEvent event = new WorkSubmittedEvent(
                 work.getId(),
                 work.getTitle(),
-                work.getStudent().getEmail(),
+                work.getStudent().getId(),
                 work.getSubmittedAt()
         );
         rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME, RabbitMQConfig.ROUTING_KEY_WORK_SUBMITTED, event);
