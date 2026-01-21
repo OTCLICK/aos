@@ -1,5 +1,7 @@
 package org.example.antiplagiarism.assemblers;
 
+import org.example.antiplagiarism.controller.GradingController;
+import org.example.antiplagiarism.controller.PlagiarismCheckController;
 import org.example.antiplagiarism.controller.SubmissionController;
 import org.example.antiplagiarism.dto.WorkSubmissionResponse;
 import org.springframework.hateoas.EntityModel;
@@ -15,7 +17,9 @@ public class WorkSubmissionModelAssembler implements RepresentationModelAssemble
     public EntityModel<WorkSubmissionResponse> toModel(WorkSubmissionResponse response) {
         return EntityModel.of(response,
                 linkTo(methodOn(SubmissionController.class).getWorkById(response.getWorkId())).withSelfRel(),
-                linkTo(methodOn(SubmissionController.class).submitWork(null)).withRel("submit")
+                linkTo(methodOn(GradingController.class).getGradeByWorkId(response.getWorkId())).withRel("grade"),
+                linkTo(methodOn(PlagiarismCheckController.class).checkPlagiarism(response.getWorkId())).withRel("plagiarism-check"),
+                linkTo(methodOn(SubmissionController.class).deleteWorkById(response.getWorkId())).withRel("delete")
         );
     }
 }
